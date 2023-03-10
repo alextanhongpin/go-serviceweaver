@@ -7,6 +7,12 @@ import (
 	"net/http"
 
 	"github.com/ServiceWeaver/weaver"
+	"github.com/ServiceWeaver/weaver/metrics"
+)
+
+var reverseCounter = metrics.NewCounter(
+	"reverse_count",
+	"The number of times Reverser.Reverse has been called",
 )
 
 //go:generate weaver generate .
@@ -46,11 +52,22 @@ type Reverser interface {
 	Reverse(context.Context, string) (string, error)
 }
 
+type reverserOptions struct {
+	Name string
+}
+
 type reverser struct {
 	weaver.Implements[Reverser]
+	weaver.WithConfig[reverserOptions]
 }
 
 func (r *reverser) Reverse(_ context.Context, s string) (string, error) {
+	name := r.Config().Name
+	logger := r.Logger()
+	nameLogger := logger.With("name", name)
+	nameLogger.Info("got name")
+
+	reverseCounter.Add(1)
 	runes := []rune(s)
 	n := len(runes)
 

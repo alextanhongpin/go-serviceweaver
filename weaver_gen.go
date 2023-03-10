@@ -12,9 +12,10 @@ import (
 
 func init() {
 	codegen.Register(codegen.Registration{
-		Name:  "github.com/alextanhongpin/go-weaver/Reverser",
-		Iface: reflect.TypeOf((*Reverser)(nil)).Elem(),
-		New:   func() any { return &reverser{} },
+		Name:     "github.com/alextanhongpin/go-weaver/Reverser",
+		Iface:    reflect.TypeOf((*Reverser)(nil)).Elem(),
+		New:      func() any { return &reverser{} },
+		ConfigFn: func(i any) any { return i.(*reverser).WithConfig.Config() },
 		LocalStubFn: func(impl any, tracer trace.Tracer) any {
 			return reverser_local_stub{impl: impl.(Reverser), tracer: tracer}
 		},

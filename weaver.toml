@@ -1,0 +1,5 @@
+[serviceweaver]
+binary = './go-weaver'
+
+["github.com/alextanhongpin/go-weaver/Reverser"]
+Name = "hello world"

@@ -1,5 +1,9 @@
 run:
-	@go run main.go
+	@SERVICEWEAVER_CONFIG=weaver.toml go run .
+
+
+reverse:
+	@curl "localhost:12345/hello?name=john"
 
 
 install:
@@ -12,3 +16,8 @@ status:
 
 dashboard:
 	@weaver single dashboard
+
+
+deploy:
+	@go build
+	@weaver multi deploy weaver.toml
