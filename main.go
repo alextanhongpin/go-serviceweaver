@@ -61,12 +61,17 @@ type reverser struct {
 	weaver.WithConfig[reverserOptions]
 }
 
-func (r *reverser) Reverse(_ context.Context, s string) (string, error) {
+// Init is where you setup infrastructure like storage etc.
+func (r *reverser) Init(ctx context.Context) error {
 	name := r.Config().Name
 	logger := r.Logger()
 	nameLogger := logger.With("name", name)
-	nameLogger.Info("got name")
+	nameLogger.Info("initialized with config")
 
+	return nil
+}
+
+func (r *reverser) Reverse(_ context.Context, s string) (string, error) {
 	reverseCounter.Add(1)
 	runes := []rune(s)
 	n := len(runes)
